@@ -1,14 +1,17 @@
-const player = (() => {
-    let playerTurn = "X";
-    const setPlayerTurn = () => playerTurn === "X" ? playerTurn = "O" : playerTurn = "X";
+const playerController = (() => {
+    let playersArray = [];
+    let playerTurn = 0;
+    const setPlayerTurn = () => playerTurn % 2 === 0 ? playerTurn = 0 : playerTurn = 1;
     const markBoard = (tile, r, c) => {
         if (!gameboard.board[r][c]) {
-            gameboard.board[r][c] = playerTurn;
-            tile.innerHTML = playerTurn;
+            let mark = playersArray[playerTurn].playerMarker;
+            gameboard.board[r][c] = mark;
+            tile.innerHTML = mark;
+            playerTurn++;
             setPlayerTurn();
         }
     }
-    return {markBoard};
+    return {playersArray, markBoard};
 })();
 
 const gameboard = (() => {
@@ -24,7 +27,7 @@ const gameboard = (() => {
                 const tileElement = document.createElement("div");
                 tileElement.setAttribute("class", "tile");
                 tileElement.innerHTML = board[r][c];
-                tileElement.addEventListener("click", () => player.markBoard(tileElement, r, c)); 
+                tileElement.addEventListener("click", () => playerController.markBoard(tileElement, r, c)); 
                 gameBoardElement.appendChild(tileElement);
             }
         }
@@ -33,6 +36,13 @@ const gameboard = (() => {
     return {board, displayBoard};
 })();
 
-const player1 = (name) => {
-    this.name = name;
+const player = (name) => {
+    const playerName = name;
+    const playerMarker = playerController.playersArray.length === 0 ? "X" : "O";
+    return {playerName, playerMarker};
 }
+
+const player1 = player("Joe");
+playerController.playersArray.push(player1);
+const player2 = player("Mama");
+playerController.playersArray.push(player2);
