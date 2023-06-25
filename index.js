@@ -32,3 +32,7 @@ const gameboard = (() => {
     };
     return {board, displayBoard};
 })();
+
+const player1 = (name) => {
+    this.name = name;
+}
