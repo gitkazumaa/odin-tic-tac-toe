@@ -1,7 +1,20 @@
+const player = (() => {
+    let playerTurn = "X";
+    const setPlayerTurn = () => playerTurn === "X" ? playerTurn = "O" : playerTurn = "X";
+    const markBoard = (tile, r, c) => {
+        if (!gameboard.board[r][c]) {
+            gameboard.board[r][c] = playerTurn;
+            tile.innerHTML = playerTurn;
+            setPlayerTurn();
+        }
+    }
+    return {markBoard};
+})();
+
 const gameboard = (() => {
-    const board = [["X", "O", "X"], 
-                   ["O", "X", "O"], 
-                   ["O", "X", "O"]
+    const board = [["", "", ""], 
+                   ["", "", ""], 
+                   ["", "", ""]
                 ];
     const gameBoardElement = document.createElement("div");
     gameBoardElement.setAttribute("class", "game-board")
@@ -11,6 +24,7 @@ const gameboard = (() => {
                 const tileElement = document.createElement("div");
                 tileElement.setAttribute("class", "tile");
                 tileElement.innerHTML = board[r][c];
+                tileElement.addEventListener("click", () => player.markBoard(tileElement, r, c)); 
                 gameBoardElement.appendChild(tileElement);
             }
         }
